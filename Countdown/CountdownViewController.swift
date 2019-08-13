@@ -18,6 +18,15 @@ class CountdownViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let countdown = Countdown()
+    
+    var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss.SS"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter
+    }()
+    
     lazy private var countdownPickerData: [[String]] = {
         // Create string arrays using numbers wrapped in string values: ["0", "1", ... "60"]
         let minutes: [String] = Array(0...60).map { String($0) }
@@ -32,12 +41,19 @@ class CountdownViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        countdown.duration = 5
+        countdown.delegate = self
+        
+        // Use a fixed-width font
+        timeLabel.font = UIFont.monospacedDigitSystemFont(ofSize: timeLabel.font.pointSize, weight: .medium)
     }
     
     // MARK: - Actions
     
     @IBAction func startButtonTapped(_ sender: UIButton) {
-        
+//        let timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false, block: timerFinished(_:))
+        countdown.start()
     }
     
     @IBAction func resetButtonTapped(_ sender: UIButton) {
@@ -53,26 +69,27 @@ class CountdownViewController: UIViewController {
     }
     
     private func updateViews() {
-        
+        timeLabel.text = string(from: countdown.timeRemaining)
     }
     
     private func timerFinished(_ timer: Timer) {
-        
+        showAlert()
     }
     
     private func string(from duration: TimeInterval) -> String {
-        #warning("return a string value derived from the time interval passed in")
-        return ""
+        let date = Date(timeIntervalSinceReferenceDate: duration)
+        return dateFormatter.string(from: date)
     }
 }
 
 extension CountdownViewController: CountdownDelegate {
     func countdownDidUpdate(timeRemaining: TimeInterval) {
-        
+        updateViews()
     }
     
     func countdownDidFinish() {
-        
+        updateViews()
+        showAlert()
     }
 }
 
