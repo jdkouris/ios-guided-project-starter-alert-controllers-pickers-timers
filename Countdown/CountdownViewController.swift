@@ -45,6 +45,9 @@ class CountdownViewController: UIViewController {
         countdown.duration = 5
         countdown.delegate = self
         
+        countdownPicker.dataSource = self
+        countdownPicker.delegate = self
+        
         // Use a fixed-width font
         timeLabel.font = UIFont.monospacedDigitSystemFont(ofSize: timeLabel.font.pointSize, weight: .medium)
     }
@@ -96,16 +99,16 @@ extension CountdownViewController: CountdownDelegate {
 
 extension CountdownViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        #warning("Change this to return the number of components for the picker view")
-        return 0
+        return countdownPickerData.count
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        #warning("Change this to return the number of rows per component in the picker view")
-        return 0
+        return countdownPickerData[component].count
     }
 }
 
 extension CountdownViewController: UIPickerViewDelegate {
-    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return countdownPickerData[component][row]
+    }
 }
