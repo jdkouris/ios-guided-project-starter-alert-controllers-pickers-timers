@@ -84,6 +84,8 @@ class CountdownViewController: UIViewController {
     }
     
     private func updateViews() {
+        startButton.isEnabled = true
+        
         switch countdown.state {
         case .started:
             timeLabel.text = string(from: countdown.timeRemaining)
