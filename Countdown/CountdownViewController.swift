@@ -57,7 +57,8 @@ class CountdownViewController: UIViewController {
     }
     
     @IBAction func resetButtonTapped(_ sender: UIButton) {
-        
+        countdown.reset()
+        updateViews()
     }
     
     // MARK: - Private
